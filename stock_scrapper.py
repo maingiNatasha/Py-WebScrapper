@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
+
+#Connector to connect to MySQL database
 import mysql.connector
 
 #Create connection
@@ -19,6 +21,7 @@ c.execute('''CREATE TABLE most_active_stocks(Stock_Symbol TEXT, Stock_Name TEXT,
 c.execute('''CREATE TABLE gainers(Stock_Symbol TEXT, Stock_Name TEXT, Stock_Price TEXT, Price_Change TEXT, Percentage_Price_Change TEXT, Link TEXT)''')
 c.execute('''CREATE TABLE losers(Stock_Symbol TEXT, Stock_Name TEXT, Stock_Price TEXT, Price_Change TEXT, Percentage_Price_Change TEXT, Link TEXT)''')
 
+#Function to scrape information on most active stock
 def most_active_stock():
     html_text = requests.get('https://www.google.com/finance/markets/most-active?hl=en').text
 
@@ -44,6 +47,7 @@ def most_active_stock():
         #Insert scrapped data into table
         c.execute('''INSERT INTO most_active_stocks VALUES(?,?,?,?,?,?)''', (stock_symbol, stock_name, stock_price, stock_price_change, percentage_price_change, stock_link))
 
+#Function to scrape data on gaining stock
 def gainers():
     html_text = requests.get('https://www.google.com/finance/markets/gainers?hl=en').text
 
@@ -69,6 +73,7 @@ def gainers():
         #Insert scrapped data into table
         c.execute('''INSERT INTO gainers VALUES(?,?,?,?,?,?)''', (stock_symbol, stock_name, stock_price, stock_price_change, percentage_price_change, stock_link))
 
+#Function to scrape data on losing stock
 def losers():
     html_text = requests.get('https://www.google.com/finance/markets/losers?hl=en').text
 
